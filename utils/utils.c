@@ -1,4 +1,6 @@
 #include "../headers.h"
+#include "../commands/commands.h"
+#include "utils.h"
 
 void reset_commands_array()
 {
@@ -32,6 +34,13 @@ void tokenize_inputs(char *input_string)
 
 int tokenize_command(int counter)
 {
+    for (int i = 0; i < BIG_SIZE; i++)
+    {
+        if (command[i])
+            free(command[i]);
+        command[i] = (char *)malloc(BIG_SIZE * sizeof(char));
+    }
+
     char *delim = " \r\t\n";
     char *input_command = (char *)malloc(BIG_SIZE * sizeof(char));
     strcpy(input_command, all_commands[counter]);
@@ -40,7 +49,7 @@ int tokenize_command(int counter)
     int cnt = 0;
     while (temp_in != NULL)
     {
-        printf("inside tokenize_command %s \n", temp_in);
+        // printf("inside tokenize_command %s \n", temp_in);
         command[cnt] = (char *)malloc(BIG_SIZE * sizeof(char));
         strcpy(command[cnt++], temp_in);
         temp_in = strtok(NULL, delim);
@@ -50,6 +59,53 @@ int tokenize_command(int counter)
     return num_args;
 }
 
-void execute(char *input_command)
+void execute()
 {
+    int exec_status = 0;
+    if (!strcmp(command[0], "echo"))
+    {
+        echo();
+    }
+    else if (!strcmp(command[0], "pwd"))
+    {
+        pwd();
+    }
+    else if (!strcmp(command[0], "cd"))
+    {
+        cd();
+    }
+    else if (!strcmp(command[0], "ls"))
+    {
+        ls();
+    }
+    // else if (!strcmp(command[0], "pinfo"))
+    // {
+    //     pinfo();
+    // }
+    // else if (!strcmp(command[0], "history"))
+    // {
+    //     int k = get_count();
+    //     print_history(k);
+    // }
+    // else if (!strcmp(command[0], "quit"))
+    // {
+    //     quit();
+    // }
+    // else if (strcmp(command[0], "bg") == 0)
+    // {
+    //     bg();
+    // }
+    // else if (strcmp(command[0], "fg") == 0)
+    // {
+    //     fg();
+    // }
+    // else if (is_background())
+    // {
+
+    //     other_commands(1);
+    // }
+    // else
+    // {
+    //     other_commands(0);
+    // }
 }

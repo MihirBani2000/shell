@@ -1,11 +1,11 @@
 # shell
 
 
-- prompt
+- prompt (10) [DONE]
 - inbuilt commands
-  - pwd (5)
-  - echo (5)
-  - cd (15)
+  - pwd (5) [DONE]
+  - echo (5) [DONE]
+  - cd (15) [DONE]
   - ls (15)
   - repeat (5)
 - custom commands

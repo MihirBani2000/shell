@@ -1,4 +1,5 @@
 #include "../headers.h"
+#include "utils.h"
 
 void show_prompt()
 {

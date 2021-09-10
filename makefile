@@ -1,1 +1,2 @@
-gcc -g main.c commands/*.c utils/*.c 
+shell:
+	gcc -g main.c commands/*.c utils/*.c 

@@ -7,7 +7,7 @@ int initialize_shell()
     if (HOME)
         free(HOME);
     HOME = (char *)malloc(BIG_SIZE * sizeof(char));
-    HOME = getcwd(HOME, BIG_SIZE);
+    getcwd(HOME, BIG_SIZE);
     if (HOME == NULL)
     {
         perror("Error retreiving Current Working Directory");
@@ -50,9 +50,10 @@ int main()
         int counter = 0;
         while (counter < num_commands)
         {
-            if (tokenize_command(counter) >= 0)
+            if (tokenize_command(counter) > 0)
             {
-                // execute(command);
+                // printf("inside main ex %d\n", counter);
+                execute();
             }
             counter++;
         }
