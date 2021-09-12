@@ -78,34 +78,30 @@ void execute()
     {
         ls();
     }
-    // else if (!strcmp(command[0], "pinfo"))
-    // {
-    //     pinfo();
-    // }
+    else if (!strcmp(command[0], "quit") || !strcmp(command[0], "exit"))
+    {
+        exit(EXIT_SUCCESS);
+    }
+    else if (!strcmp(command[0], "repeat"))
+    {
+        repeat();
+    }
+    else if (!strcmp(command[0], "pinfo"))
+    {
+        pinfo();
+    }
     // else if (!strcmp(command[0], "history"))
     // {
     //     int k = get_count();
     //     print_history(k);
     // }
-    // else if (!strcmp(command[0], "quit"))
-    // {
-    //     quit();
-    // }
-    // else if (strcmp(command[0], "bg") == 0)
-    // {
-    //     bg();
-    // }
-    // else if (strcmp(command[0], "fg") == 0)
-    // {
-    //     fg();
-    // }
-    // else if (is_background())
-    // {
-
-    //     other_commands(1);
-    // }
-    // else
-    // {
-    //     other_commands(0);
-    // }
+    else
+    {
+        int bg_flag = 0;
+        char temp1 = command[num_args - 1][0];
+        char temp2 = command[num_args - 1][strlen(command[num_args - 1]) - 1];
+        if (temp1 == '&' || temp2 == '&')
+            bg_flag = 1;
+        shell_commands(bg_flag);
+    }
 }

@@ -148,8 +148,8 @@ void print_ls(char *path, int sp_flag)
             }
             else
             {
-                printf("ls: error in retreiving owner/group name\n");
-                return;
+                printf("ls: error in retreiving owner/group of file: %s\n", fname);
+                continue;
             }
 
             // size

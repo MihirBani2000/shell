@@ -22,14 +22,22 @@
 // #define NUM_OF_HISTORY 20
 // #define DEF_HISTORY_SHOW 10
 
+pid_t SHELL_ID;
+int num_args;
+int num_commands;
 char *HOME;
 char *PROMPT;
 char *LAST_WD;
 char *CWD;
 char *all_commands[BIG_SIZE];
 char *command[BIG_SIZE];
-int num_args;
-int num_commands;
-pid_t SHELL_ID;
+
+int num_of_bg_jobs;
+struct Background_Jobs
+{
+    char name[BIG_SIZE];
+    pid_t pid;
+};
+struct Background_Jobs bgjobs[500];
 
 #endif

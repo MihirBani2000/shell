@@ -6,7 +6,7 @@
   - pwd (5) [DONE]
   - echo (5) [DONE]
   - cd (15) [DONE]
-  - ls (15)
+  - ls (15) [DONE]
   - repeat (5)
 - custom commands
   - pinfo (15)
