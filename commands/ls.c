@@ -122,10 +122,10 @@ void print_ls(char *path, int sp_flag)
                 continue;
             }
             char *temp_buffer = (char *)malloc(BIG_SIZE * sizeof(char));
-            char *time = (char *)malloc(SMALL_SIZE * sizeof(char));
             set_perms(file_address, perms);
             struct passwd *pw = getpwuid(file_st.st_uid);
             struct group *gr = getgrgid(file_st.st_gid);
+            char *time = (char *)malloc(SMALL_SIZE * sizeof(char));
             total += file_st.st_blocks;
 
             // perms
@@ -233,8 +233,8 @@ void ls()
             printf("\033[1;36m%s\033[0m:\n", path);
             print_ls(path, sp_flag[0]);
             free(path);
-            if (sp_flag[1])
-                printf("\n");
+            // if (sp_flag[1])
+            //     printf("\n");
         }
         numarg++;
     }

@@ -10,9 +10,9 @@
   - repeat (5)
 - custom commands
   - pinfo (15)
-- foreground process (10)
-- background process (10)
-  - finishing process (10)
+- foreground process (10) [DONE]
+- background process (10) [DONE]
+- finishing process (10) [DONE]
 
 -  (bonus - 20)
    -  history(5)

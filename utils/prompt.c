@@ -36,14 +36,14 @@ void show_prompt()
         exit(EXIT_FAILURE);
     }
 
-    if (strstr(CWD, HOME))
+    if (!strstr(CWD, HOME))
     {
-        strcpy(path, "~");
-        strcat(path, CWD + strlen(HOME));
+        strcpy(path, CWD);
     }
     else
     {
-        strcpy(path, CWD);
+        strcpy(path, "~");
+        strcat(path, CWD + strlen(HOME));
     }
 
     sprintf(PROMPT,
