@@ -55,8 +55,57 @@ int tokenize_command(int counter)
         temp_in = strtok(NULL, delim);
     }
     num_args = cnt;
+    command[num_args] = NULL;
     free(input_command);
     return num_args;
+}
+
+void handle_child_finish()
+{
+    int status;
+    char *temp_name = (char *)malloc(BIG_SIZE);
+    pid_t pid = waitpid(-1, &status, WNOHANG);
+    if (pid <= 0)
+        return;
+    // some child process finished
+    for (int i = 0; i < num_bgjobs; i++)
+    {
+        if (bgjobs[i].pid == pid)
+        { // this job is now removed
+            num_bgjobs--;
+            strcpy(temp_name, bgjobs[i].name);
+            for (int j = i + 1; j <= num_bgjobs; j++)
+            {
+                bgjobs[j - 1].pid = bgjobs[j].pid;
+                strcpy(bgjobs[j - 1].name, bgjobs[j].name);
+            }
+            break;
+        }
+    }
+    if (WIFEXITED(status) && !WEXITSTATUS(status))
+        fprintf(stderr, "\n%s with PID %d exited normally.\n", temp_name, pid);
+    else
+        fprintf(stderr, "\n%s with PID %d exited abnormally.\n", temp_name, pid);
+
+    show_prompt();
+    free(temp_name);
+    fflush(stdout);
+}
+
+void add_bg_proc(pid_t pid, char **proc_command)
+{
+    int idx = 0;
+    strcpy(bgjobs[num_bgjobs].name, proc_command[0]);
+    bgjobs[num_bgjobs].pid = pid;
+
+    char *temp = (char *)malloc(SMALL_SIZE);
+    while (proc_command[++idx] != NULL)
+    {
+        sprintf(temp, " %s", proc_command[idx]);
+        strcat(bgjobs[num_bgjobs].name, temp);
+    }
+    free(temp);
+    ++num_bgjobs;
 }
 
 void execute()

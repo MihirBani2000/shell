@@ -18,6 +18,7 @@ int initialize_shell()
     strcpy(LAST_WD, HOME);
     strcpy(CWD, HOME);
     SHELL_ID = getpid();
+    signal(SIGCHLD, handle_child_finish);
     return 0;
 }
 
