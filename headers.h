@@ -12,7 +12,9 @@
 #include <signal.h>
 #include <unistd.h> //getcwd
 #include <pwd.h>    //getpwuid
+#include <grp.h>
 #include <fcntl.h>
+#include <time.h>
 
 #define BIG_SIZE 1005
 #define SMALL_SIZE 255

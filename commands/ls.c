@@ -73,14 +73,22 @@ void set_perms(char *filename, char *perms)
     perms[7] = (fs.st_mode & S_IWOTH) ? 'w' : '-';
     perms[8] = (fs.st_mode & S_IXOTH) ? 'x' : '-';
     perms[9] = '\0';
+    return;
 }
 
 void print_ls(char *path, int sp_flag)
 {
     // printf("inside print_ls: %s\n", path);
     // printf("inside print_ls: %d\n", sp_flag);
-    char perms[10];
     DIR *dir = opendir(path);
+    char *details[BIG_SIZE];
+    for (int i = 0; i < BIG_SIZE; i++)
+    {
+        details[i] = (char *)malloc(BIG_SIZE * sizeof(char));
+    }
+    long total = 0;
+    int num_entries = 0;
+
     if (dir == NULL)
     {
         perror("ls: Error opening directory");
@@ -90,30 +98,91 @@ void print_ls(char *path, int sp_flag)
     char *file_address = (char *)malloc(BIG_SIZE * sizeof(char));
     while ((file = readdir(dir)) != NULL)
     {
-        if (((sp_flag != 1) || (sp_flag != 3)) && (file->d_name[0] == '.'))
+        char *fname = file->d_name;
+        if (((sp_flag != 1) || (sp_flag != 3)) && (fname[0] == '.'))
         {
             // without `a`
             continue;
         }
 
+        char perms[10];
+        struct stat file_st;
         strcpy(file_address, path);
         strcat(file_address, "/");
-        strcat(file_address, file->d_name);
-
-        struct stat file_st;
-        set_perms(file_address, perms);
+        strcat(file_address, fname);
 
         if (sp_flag < 2)
         {
             // without `l`
-            if ((stat(file_address, &file_st) == 0) && S_ISDIR(file_st.st_mode))
-                printf("\033[1;34m%s\033[0m\t", file->d_name);
+            if ((stat(path, &file_st) == 0) && S_ISDIR(file_st.st_mode))
+                printf("\033[1;34m%s\033[0m\t", fname);
             else
-                printf("%s\t", file->d_name);
+                printf("%s\t", fname);
         }
         else
         {
             // with `l`
+            if (stat(path, &file_st) < 0)
+            {
+                perror("ls: error in reading file/directory");
+                return;
+            }
+            else
+            {
+                set_perms(path, perms);
+                total += file_st.st_blocks;
+                struct passwd *pw = getpwuid(file_st.st_uid);
+                struct group *gr = getgrgid(file_st.st_gid);
+                char *temp_buffer = (char *)malloc(BIG_SIZE * sizeof(char));
+                char *time = (char *)malloc(SMALL_SIZE * sizeof(char));
+
+                if (S_ISDIR(file_st.st_mode))
+                    strcpy(details[num_args], "d");
+                else
+                    strcpy(details[num_args], "-");
+                // all other things
+                sprintf(temp_buffer, "%ld\t", file_st.st_nlink);
+                strcat(details[num_entries], temp_buffer);
+                if ((pw != 0) && (gr != 0))
+                {
+                    sprintf(temp_buffer, "%s\t", pw->pw_name);
+                    strcat(details[num_entries], temp_buffer);
+                    sprintf(temp_buffer, "%s\t", gr->gr_name);
+                    strcat(details[num_entries], temp_buffer);
+                }
+                else
+                {
+                    printf("ls: error in retreiving owner/group name\n");
+                    return;
+                }
+                // size
+                sprintf(temp_buffer, "%ld\t", file_st.st_size);
+                strcat(details[num_entries], temp_buffer);
+                // date and time
+                strftime(time, 50, "%b  %d %H:%M", localtime(&file_st.st_mtime));
+                sprintf(temp_buffer, "%s\t", time);
+                strcat(details[num_entries], temp_buffer);
+
+                // for name
+                if (S_ISDIR(file_st.st_mode))
+                    sprintf(temp_buffer, "\033[1;34m%s\033[0m", fname);
+                else
+                    sprintf(temp_buffer, "%s", fname);
+
+                strcat(details[num_args], temp_buffer);
+                num_entries++;
+                free(temp_buffer);
+                free(time);
+            }
+        }
+    }
+
+    if (sp_flag > 1)
+    { // printing the list
+        printf("total %ld\n", total);
+        for (int i = 0; i < num_entries; i++)
+        {
+            printf("%s\n", details[i]);
         }
     }
 
@@ -121,6 +190,10 @@ void print_ls(char *path, int sp_flag)
     if (sp_flag < 2)
         printf("\n");
 
+    for (int i = 0; i < BIG_SIZE; i++)
+    {
+        free(details[i]);
+    }
     closedir(dir);
 }
 
