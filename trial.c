@@ -10,14 +10,14 @@ int main()
     printf("prp %s\n", prp);
     // free(prp);
 
-    if (prp)
-    {
-        printf("prp");
-        free(prp);
-    }
+    // if (prp)
+    // {
+    //     printf("prp");
+    //     free(prp);
+    // }
 
-    prp = (char *)malloc(100);
-    strcpy(prp, "mihir");
+    // prp = (char *)malloc(100);
+    strcpy(prp, "bani");
     // prp = "mihir";
     printf("prp %s\n", prp);
     free(prp);

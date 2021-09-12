@@ -5,11 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <dirent.h> // ls
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h> // struct stat
 #include <signal.h>
 #include <unistd.h> //getcwd
 #include <pwd.h>    //getpwuid
+#include <fcntl.h>
 
 #define BIG_SIZE 1005
 #define SMALL_SIZE 255
