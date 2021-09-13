@@ -146,11 +146,19 @@ void execute()
     // }
     else
     {
-        int bg_flag = 0;
-        char temp1 = command[num_args - 1][0];
-        char temp2 = command[num_args - 1][strlen(command[num_args - 1]) - 1];
-        if (temp1 == '&' || temp2 == '&')
+        int bg_flag = 0, len = strlen(command[num_args - 1]);
+        char temp1 = command[num_args - 1][len - 1]; // xeyes&
+        char temp2 = command[num_args - 1][0];       // xeyes &
+        if (temp2 == '&')
+        {
             bg_flag = 1;
+            --num_args;
+        }
+        else if (temp1 == '&')
+        {
+            bg_flag = 1;
+            command[num_args - 1][len - 1] = '\0';
+        }
         shell_commands(bg_flag);
     }
 }

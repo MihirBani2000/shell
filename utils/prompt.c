@@ -50,7 +50,7 @@ void show_prompt()
             "<\033[1;32m%s@%s:\033[1;34m%s\033[0m> ",
             username, hostname, path);
 
-    printf("\n%s", PROMPT);
+    printf("%s", PROMPT);
     fflush(stdout);
 
     free(username);

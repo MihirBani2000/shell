@@ -33,16 +33,22 @@ int main()
     }
     while (1)
     {
+
         show_prompt();
         reset_commands_array();
 
         char *input_commands = (char *)malloc(BIG_SIZE * sizeof(char));
+        if (fgets(input_commands, BIG_SIZE, stdin) == NULL)
+        {
+            // pressing ctrl+D
+            exit(EXIT_SUCCESS);
+        }
         char tempchar;
-        scanf("%[^\n]s", input_commands);
-        scanf("%c", &tempchar);
+        // scanf("%[^\n]s", input_commands);
+        // scanf("%c", &tempchar);
         // printf("input %s\n", input_commands);
 
-        if (strcmp(input_commands, "\n") == 0)
+        if (!strcmp(input_commands, "\n"))
             continue; // continue if press entered
 
         tokenize_inputs(input_commands);

@@ -1,12 +1,12 @@
 #ifndef COMMMANDS
 #define COMMMANDS
 
-void ls();
 void cd();
 void echo();
-void pwd();
+void ls();
 void pinfo();
+void pwd();
 void repeat();
-void shell_commands();
+void shell_commands(int bg);
 
 #endif
