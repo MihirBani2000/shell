@@ -14,6 +14,7 @@ void shell_commands(int bg_flag)
     {
         // child process
         setpgid(0, 0);
+        // printf("\nchild pid %d\n", getpid());
         command[num_args] = NULL;
         if (execvp(command[0], command) < 0)
         {
@@ -34,6 +35,8 @@ void shell_commands(int bg_flag)
         }
         else
         { // for foreground processes
+            // printf("\nparent pid %d\n", pid);
+
             signal(SIGTTIN, SIG_IGN);
             signal(SIGTTOU, SIG_IGN);
             int status;

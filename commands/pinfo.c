@@ -18,17 +18,21 @@ void pinfo()
         return;
     }
 
+    char *status_file_name = (char *)malloc(SMALL_SIZE * sizeof(char));
     char *stat_file_name = (char *)malloc(SMALL_SIZE * sizeof(char));
     char *exe_file_name = (char *)malloc(SMALL_SIZE * sizeof(char));
-    sprintf(stat_file_name, "/proc/%d/status", pid);
+    sprintf(status_file_name, "/proc/%d/status", pid);
+    sprintf(stat_file_name, "/proc/%d/stat", pid);
     sprintf(exe_file_name, "/proc/%d/exe", pid);
 
-    FILE *stat_file;
+    FILE *status_file, *stat_file;
+    char *status_buffer = (char *)malloc(BIG_SIZE * sizeof(char));
     char *stat_buffer = (char *)malloc(BIG_SIZE * sizeof(char));
     char *exe_buffer = (char *)malloc(BIG_SIZE * sizeof(char));
 
+    status_file = fopen(status_file_name, "r");
     stat_file = fopen(stat_file_name, "r");
-    if (stat_file == NULL)
+    if (status_file == NULL || stat_file == NULL)
     {
         char *err_buf = (char *)malloc(SMALL_SIZE * sizeof(char));
         sprintf(err_buf, "Process with pid: %d doesn't exist", pid);
@@ -39,10 +43,11 @@ void pinfo()
 
     char *p_status = (char *)malloc(SMALL_SIZE * sizeof(char));
     char *p_exepath = (char *)malloc(BIG_SIZE * sizeof(char));
-    long p_memory;
-    while (fgets(stat_buffer, BIG_SIZE, stat_file))
+    char *p_memory = (char *)malloc(SMALL_SIZE * sizeof(char));
+    // long p_memory;
+    while (fgets(status_buffer, BIG_SIZE, status_file))
     {
-        char *token = strtok(stat_buffer, " \t\r");
+        char *token = strtok(status_buffer, " \t\r");
         if (strcmp(token, "State:") == 0)
         {
             token = strtok(NULL, " \r\t");
@@ -51,13 +56,32 @@ void pinfo()
         if (strcmp(token, "VmSize:") == 0)
         {
             token = strtok(NULL, " \r\t");
-            p_memory = atol(token);
+            strcpy(p_memory, token);
         }
     }
 
+    pid_t tgpid;
+    fgets(stat_buffer, BIG_SIZE, stat_file);
+    // printf("%s\n", stat_buffer);
+    // printf("%s\n", stat_file_name);
+    char *temp_token = strtok(stat_buffer, " \t\r");
+    int pos = 8;
+    while (--pos)
+    {
+        temp_token = strtok(NULL, " ");
+    }
+    tgpid = atoi(temp_token);
+    // printf("tgpid -- %d\n", tgpid);
+
+    // check if its process group id is equal to the pid of the terminal controlling process
+    // basically checks if process is using up the terminal
+    // if (getpgid(pid) == tcgetpgrp(STDOUT_FILENO))
+    if ((getpgid(pid) == tgpid) && (!strcmp(p_status, "R") || !strcmp(p_status, "S")))
+        strcat(p_status, "+");
+
     printf("pid -- %d\n", pid);
     printf("Process status -- %s\n", p_status);
-    printf("memory -- %ld KB\n", p_memory);
+    printf("memory -- %s KB\n", p_memory);
 
     int written_size = readlink(exe_file_name, exe_buffer, BIG_SIZE);
     if (written_size < 0)
@@ -86,11 +110,14 @@ void pinfo()
     }
 
     // printf("\n\nhi bhai\n\n");
+    fclose(status_file);
     fclose(stat_file);
     free(p_status);
     free(p_exepath);
+    free(status_file_name);
     free(stat_file_name);
     free(exe_file_name);
+    free(status_buffer);
     free(stat_buffer);
     free(exe_buffer);
     return;
