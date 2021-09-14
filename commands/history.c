@@ -90,7 +90,7 @@ void print_history()
     if (num_args == 2)
         print_num = atoi(command[1]);
 
-    if (print_num > 20)
+    if ((print_num < 1) || (print_num > 20))
     {
         fprintf(stderr, "history: invalid arguments\n");
         return;
