@@ -17,8 +17,15 @@ int initialize_shell()
     CWD = (char *)malloc(BIG_SIZE * sizeof(char));
     strcpy(LAST_WD, HOME);
     strcpy(CWD, HOME);
+
     SHELL_ID = getpid();
     signal(SIGCHLD, handle_child_finish);
+
+    // history
+    strcpy(history_path, HOME);
+    strcat(history_path, "/.shell_history");
+    load_history_from_file();
+
     return 0;
 }
 
@@ -41,16 +48,15 @@ int main()
         if (fgets(input_commands, BIG_SIZE, stdin) == NULL)
         {
             // pressing ctrl+D
-            exit(EXIT_SUCCESS);
+            custom_exit(EXIT_SUCCESS);
         }
         char tempchar;
-        // scanf("%[^\n]s", input_commands);
-        // scanf("%c", &tempchar);
         // printf("input %s\n", input_commands);
 
         if (!strcmp(input_commands, "\n"))
             continue; // continue if press entered
 
+        add_to_history_buffer(input_commands);
         tokenize_inputs(input_commands);
         free(input_commands);
 
@@ -59,7 +65,6 @@ int main()
         {
             if (tokenize_command(counter) > 0)
             {
-                // printf("inside main ex %d\n", counter);
                 execute();
             }
             counter++;

@@ -108,6 +108,12 @@ void add_bg_proc(pid_t pid, char **proc_command)
     ++num_bgjobs;
 }
 
+void custom_exit(int flag)
+{
+    save_history_to_file();
+    exit(flag);
+}
+
 void execute()
 {
     int exec_status = 0;
@@ -129,7 +135,7 @@ void execute()
     }
     else if (!strcmp(command[0], "quit") || !strcmp(command[0], "exit"))
     {
-        exit(EXIT_SUCCESS);
+        custom_exit(EXIT_SUCCESS);
     }
     else if (!strcmp(command[0], "repeat"))
     {
@@ -139,11 +145,10 @@ void execute()
     {
         pinfo();
     }
-    // else if (!strcmp(command[0], "history"))
-    // {
-    //     int k = get_count();
-    //     print_history(k);
-    // }
+    else if (!strcmp(command[0], "history"))
+    {
+        print_history();
+    }
     else
     {
         int bg_flag = 0, len = strlen(command[num_args - 1]);

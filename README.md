@@ -15,6 +15,6 @@
 - finishing process (10) [DONE]
 
 -  (bonus - 20)
-   -  history(5)
-   -  history num (5) 
+   -  history(5) [DONE]
+   -  history num (5) [DONE]
    -  up arrow(10)

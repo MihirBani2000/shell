@@ -33,7 +33,7 @@ void show_prompt()
     if (getcwd(CWD, BIG_SIZE) == NULL)
     {
         perror("Error while obtaining current working directory");
-        exit(EXIT_FAILURE);
+        custom_exit(EXIT_FAILURE);
     }
 
     if (!strstr(CWD, HOME))

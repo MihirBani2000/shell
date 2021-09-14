@@ -8,7 +8,7 @@
 #include <dirent.h> // ls
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/stat.h> // struct stat
+#include <sys/stat.h>
 #include <signal.h>
 #include <unistd.h> //getcwd
 #include <pwd.h>    //getpwuid
@@ -20,8 +20,7 @@
 #define BIG_SIZE 1005
 #define SMALL_SIZE 255
 #define MAX_BG_JOBS 200
-// #define MAX_HISTORY 20
-// #define DEF_HISTORY_SHOW 10
+#define MAX_HISTORY 20
 
 // global variables
 pid_t SHELL_ID;
@@ -44,8 +43,8 @@ struct Background_Jobs
 struct Background_Jobs bgjobs[MAX_BG_JOBS];
 
 // history related
-// int idx_of_history;
-// char history[MAX_HISTORY][BIG_SIZE];
-// char history_path[BIG_SIZE];
+int hist_count;
+char *history[MAX_HISTORY];
+char history_path[BIG_SIZE];
 
 #endif
