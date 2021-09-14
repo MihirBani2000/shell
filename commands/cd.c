@@ -13,7 +13,7 @@ void cd()
 
     if (num_args == 1)
     {
-        printf("hi\n");
+        // printf("hi\n");
         // no arg given to cd command, switch to home
         if ((chdir(HOME) != 0))
         {

@@ -7,9 +7,9 @@
   - echo (5) [DONE]
   - cd (15) [DONE]
   - ls (15) [DONE]
-  - repeat (5)
+  - repeat (5) [DONE]
 - custom commands
-  - pinfo (15)
+  - pinfo (15) [DONE]
 - foreground process (10) [DONE]
 - background process (10) [DONE]
 - finishing process (10) [DONE]
