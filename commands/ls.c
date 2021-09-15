@@ -69,10 +69,113 @@ void set_perms(char *filename, char *perms)
     return;
 }
 
+void ls_for_file(char *file_address, int sp_flag)
+{
+    char *details = (char *)malloc(BIG_SIZE * sizeof(char));
+    char *fname = (char *)malloc(SMALL_SIZE * sizeof(char));
+    long total = 0;
+    struct stat file_st;
+    char perms[10];
+
+    if (stat(file_address, &file_st) != 0)
+    {
+        perror("ls: error accessing file");
+        return;
+    }
+
+    // get file name
+    int pos = strlen(file_address);
+    while (pos >= 0 && file_address[pos] != '/')
+    {
+        pos--;
+    }
+    pos++;
+    strcpy(fname, file_address + pos);
+
+    if (sp_flag < 2)
+    {
+        // without `l`
+        printf("\033[0m%s\n", fname);
+    }
+    else
+    {
+        // with `l`
+        char *temp_buffer = (char *)malloc(BIG_SIZE * sizeof(char));
+        set_perms(file_address, perms);
+        struct passwd *pw = getpwuid(file_st.st_uid);
+        struct group *gr = getgrgid(file_st.st_gid);
+        char *time = (char *)malloc(SMALL_SIZE * sizeof(char));
+        total += file_st.st_blocks;
+
+        // perms
+        strcpy(details, "-");
+        sprintf(temp_buffer, "%s  ", perms);
+        strcat(details, temp_buffer);
+
+        // links, owner, group
+        sprintf(temp_buffer, "%ld\t", file_st.st_nlink);
+        strcat(details, temp_buffer);
+        if ((pw != 0) && (gr != 0))
+        {
+            sprintf(temp_buffer, "%s\t", pw->pw_name);
+            strcat(details, temp_buffer);
+            sprintf(temp_buffer, "%s\t", gr->gr_name);
+            strcat(details, temp_buffer);
+        }
+        else
+        {
+            printf("ls: error in retreiving owner/group of file: %s\n", fname);
+            return;
+        }
+
+        // size
+        sprintf(temp_buffer, "%ld\t", file_st.st_size);
+        strcat(details, temp_buffer);
+        // date and time
+        strftime(time, 50, "%b %d %H:%M", localtime(&file_st.st_mtime));
+        sprintf(temp_buffer, "%s\t", time);
+        strcat(details, temp_buffer);
+
+        // for name
+        sprintf(temp_buffer, "%s", fname);
+
+        strcat(details, temp_buffer);
+        free(temp_buffer);
+        free(time);
+    }
+
+    if (sp_flag > 1)
+    { // printing the list
+        printf("total %ld\n", total / 2);
+        printf("%s\n", details);
+    }
+
+    free(fname);
+    free(details);
+
+    if (sp_flag < 2)
+        printf("\n");
+
+    return;
+}
+
 void print_ls(char *path, int sp_flag)
 {
+    struct stat statbuf;
+    if (stat(path, &statbuf) != 0)
+    {
+        perror("ls: invalid argument");
+        return;
+    }
+
     DIR *dir = opendir(path);
-    if (dir == NULL)
+    if (errno == ENOTDIR)
+    {
+        ls_for_file(path, sp_flag);
+        // printf("hi ai ma dal \n");
+        return;
+    }
+    else if (dir == NULL)
     {
         perror("ls: Error opening directory");
         return;
