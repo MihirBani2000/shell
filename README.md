@@ -25,19 +25,19 @@ Extra whitespaces given in commands or arguments is ignored.
   2. `echo` - prints whatever is given as argument as it is
   3. `cd` - changes the cwd to the mentioned directory, if no argument, changes to the home (~) directory.
      - arguments: `.`, `..`, `-`, `~`, any relative/absolute path to a directory
-  5. `ls` - lists all the files/directories of the place passed as arguments, or if none pased the cwd.
+  4. `ls` - lists all the files/directories of the place passed as arguments, or if none pased the cwd.
      - flags: `-a`, `-l`, `-a -l`, `-l -a`, `-al`, `-la`. where *a* is for all, and *l* is for long.
      - Supports mulitple directories as arguments. If mulitple directories are given along with flags, the flags apply to all directories.
-  6. `repeat` - takes an argument *num command*, and executes the mentioned command *num* times.
-  7. `history`
+  5. `repeat` - takes an argument *num command*, and executes the mentioned command *num* times.
+  6. `history`
      - by default prints the last 10 typed commands of shell, or if lesser than 10 available, then print them.
      - with flag *num*. Prints last *num* commands from history. *1 < num < 21*.
      - Maximum of 20 commands are stored in the history.
      - On closing the shell by using `CTRL+D` or `exit` or `quit`, the history is saved to a file `.shell_history` in the home directory. History is loaded from the same file for other shell sessions.
      - If the file `.shell_history` is not formed yet, or is unreadable, it is ignored. Errors are generated if writing to this file is problematic.
-  8. `pinfo` - displays the details of a process with pid passed as argument.
+  7. `pinfo` - displays the details of a process with pid passed as argument.
      - If no argument passed, the pid of the running shell is considered. 
-
+8. Other commands from Bash - executed with the help of `execvp` command. 
 ### Processes 
 - **Foreground process** - execution of process that happen in the foreground. These take away control from shell and must be finished/terminated to regain control of the shell.
 - **Background process** - any command passed with `&` flag is treated as background process. The user can use the shell normally without waiting for completion of command. The pid of child process is printed to terminal when command is executed. 

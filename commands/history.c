@@ -61,6 +61,8 @@ void save_history_to_file()
 
 void add_to_history_buffer(char *line)
 {
+    if (hist_count && strcmp(history[hist_count - 1], line) == 0)
+        return;
     if (hist_count == MAX_HISTORY)
     {
         for (int i = 1; i < hist_count; i++)
