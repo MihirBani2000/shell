@@ -21,12 +21,12 @@ void load_history_from_file()
     }
 
     FILE *hfile = fopen(history_path, "r");
+    hist_count = 0;
     if (hfile == NULL)
     {
         // perror("history: unable to open/create file .shell_history");
         return;
     }
-    hist_count = 0;
     while (fgets(history[hist_count], BIG_SIZE, hfile) != NULL)
     {
         hist_count++;
@@ -106,6 +106,38 @@ void print_history()
     {
         printf("%s", history[i]);
     }
+
+    return;
+}
+
+void get_history_at_index(int *ind, char *input_command)
+{
+    if (hist_count == 0)
+    {
+        strcpy(input_command, "\0");
+        return;
+    }
+    if (*ind <= 0)
+    {
+        *ind = 0;
+        strcpy(input_command, "\0");
+        return;
+    }
+
+    int counter = hist_count - *ind;
+    if (counter > 0)
+    {
+        strcpy(input_command, history[counter]);
+    }
+    else
+    {
+        *ind = hist_count;
+        strcpy(input_command, history[0]);
+    }
+
+    int len = strlen(input_command);
+    if (input_command[len - 1] == '\n')
+        input_command[len - 1] = '\0';
 
     return;
 }

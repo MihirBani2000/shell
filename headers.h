@@ -15,6 +15,8 @@
 #include <grp.h>
 #include <fcntl.h>
 #include <time.h>
+#include <termios.h>
+#include <ctype.h>
 
 // global parameters
 #define BIG_SIZE 1005

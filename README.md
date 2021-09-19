@@ -35,6 +35,8 @@ Extra whitespaces given in commands or arguments is ignored.
      - Maximum of 20 commands are stored in the history.
      - On closing the shell by using `CTRL+D` or `exit` or `quit`, the history is saved to a file `.shell_history` in the home directory. History is loaded from the same file for other shell sessions.
      - If the file `.shell_history` is not formed yet, or is unreadable, it is ignored. Errors are generated if writing to this file is problematic.
+     - `Up Arrow` - on pressing the up arrow, recent commands can be seen in the order newer to older.
+     - `Down Arrow` - on pressing the down arrow, recent commands can be seen in the order older to newer.
   7. `pinfo` - displays the details of a process with pid passed as argument.
      - If no argument passed, the pid of the running shell is considered. 
 8. Other commands from Bash - executed with the help of `execvp` command. 

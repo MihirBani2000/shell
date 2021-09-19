@@ -9,5 +9,9 @@ void handle_child_finish();
 void add_bg_proc(pid_t pid, char **proc_details);
 void custom_exit(int flag);
 void execute();
+void die(const char *s);
+void disableRawMode();
+void enableRawMode();
+void take_input_with_arrow(char *input_commands);
 
 #endif

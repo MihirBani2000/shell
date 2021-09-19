@@ -21,6 +21,7 @@ int main()
     // prp = "mihir";
     printf("prp %s\n", prp);
     free(prp);
+    printf("\b");
 
     char *com[10];
     if (com)
@@ -29,6 +30,7 @@ int main()
         printf("hi\n");
     }
 
+    printf("\b");
     for (int i = 0; i < 10; i++)
     {
         com[i] = (char *)malloc(100);
@@ -49,7 +51,7 @@ int main()
         com[i] = (char *)malloc(100);
         strcpy(com[i], "fadfas string no - ");
         // strcat(com[i], (char)i);
-        printf("%s\n", com[i]);
+        printf("\b%s\t", com[i]);
     }
     return 0;
 }

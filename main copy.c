@@ -40,34 +40,21 @@ int main()
     }
     while (1)
     {
+
         show_prompt();
         reset_commands_array();
 
         char *input_commands = (char *)malloc(BIG_SIZE * sizeof(char));
-        memset(input_commands, '\0', BIG_SIZE);
-        setbuf(stdout, NULL);
-        // if (fgets(input_commands, BIG_SIZE, stdin) == NULL)
-        // {
-        //     // pressing ctrl+D
-        //     custom_exit(EXIT_SUCCESS);
-        // }
-        take_input_with_arrow(input_commands);
-
-        // printf("\nInput Read: [%s]\n", input_commands);
+        if (fgets(input_commands, BIG_SIZE, stdin) == NULL)
+        {
+            // pressing ctrl+D
+            custom_exit(EXIT_SUCCESS);
+        }
+        char tempchar;
+        // printf("input %s\n", input_commands);
 
         if (!strcmp(input_commands, "\n"))
-        {
-            printf("\n");
             continue; // continue if press entered
-        }
-
-        strcat(input_commands, "\n");
-
-        if (!strcmp(input_commands, "\n"))
-        {
-            printf("\n");
-            continue; // continue if press entered
-        }
 
         add_to_history_buffer(input_commands);
         tokenize_inputs(input_commands);
@@ -78,7 +65,6 @@ int main()
         {
             if (tokenize_command(counter) > 0)
             {
-                printf("\n");
                 execute();
             }
             counter++;

@@ -46,12 +46,11 @@ void show_prompt()
         strcat(path, CWD + strlen(HOME));
     }
 
-    sprintf(PROMPT,
-            "<\033[1;32m%s@%s:\033[1;34m%s\033[0m> ",
+    sprintf(PROMPT, "<\033[1;32m%s@%s:\033[1;34m%s\033[0m> ",
             username, hostname, path);
 
     printf("%s", PROMPT);
-    fflush(stdout);
+    // fflush(stdout);
 
     free(username);
     free(hostname);
