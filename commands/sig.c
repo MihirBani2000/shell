@@ -23,9 +23,9 @@ void sig()
     }
 
     signal = atoi(command[2]);
-    if ((signal < 1) || (signal > 64))
+    if ((signal < 1) || (signal > 64) || (signal == 16) || (signal == 32) || (signal == 33))
     {
-        fprintf(stderr, "sig: invalid signal number - should be between 1 and 64 (both inclusive)\n");
+        fprintf(stderr, "sig: invalid signal number - should be in [1,15] [17,31] [34,64]\n");
         return;
     }
 

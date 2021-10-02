@@ -2,56 +2,53 @@
 #include "string.h"
 #include "stdlib.h"
 
+#define num_bgjobs 9
+char bgjobs[num_bgjobs + 1][100];
+
+void lex_sort(int *arr)
+{ // bubble sort
+    int temp = 0;
+    for (int i = 1; i < num_bgjobs; i++)
+    {
+        printf("%d - i\n", i);
+        for (int j = 1; j <= num_bgjobs - i; j++)
+        {
+            printf("%d - j\n", j);
+            if (strcmp(bgjobs[arr[j]], bgjobs[arr[j + 1]]) > 0)
+            {
+                // a < b
+                temp = arr[j + 1];
+                arr[j + 1] = arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+    return;
+}
+
 int main()
 {
-    char *prp;
-    prp = (char *)malloc(100);
-    strcpy(prp, "mihir");
-    printf("prp %s\n", prp);
-    // free(prp);
-
-    // if (prp)
-    // {
-    //     printf("prp");
-    //     free(prp);
-    // }
-
-    // prp = (char *)malloc(100);
-    strcpy(prp, "bani");
-    // prp = "mihir";
-    printf("prp %s\n", prp);
-    free(prp);
-    printf("\b");
-
-    char *com[10];
-    if (com)
+    int arr[100];
+    for (int i = 0; i < num_bgjobs + 1; i++)
     {
-        // free(com);
-        printf("hi\n");
+        arr[i] = i;
+    }
+    strcpy(bgjobs[1], "zebra");
+    strcpy(bgjobs[2], "name");
+    strcpy(bgjobs[3], "is");
+    strcpy(bgjobs[4], "mihir");
+    strcpy(bgjobs[5], "bani");
+    strcpy(bgjobs[6], "am zz");
+    strcpy(bgjobs[7], "i");
+    strcpy(bgjobs[8], "am z");
+    strcpy(bgjobs[9], "hello");
+    printf("%d\n\n", strcmp(bgjobs[9], bgjobs[1]));
+    lex_sort(arr);
+    for (int i = 0; i < num_bgjobs + 1; i++)
+    {
+        printf("%d - ", arr[i]);
+        printf("%s\n", bgjobs[arr[i]]);
     }
 
-    printf("\b");
-    for (int i = 0; i < 10; i++)
-    {
-        com[i] = (char *)malloc(100);
-        strcpy(com[i], "string no - ");
-        printf("%s\n", com[i]);
-    }
-
-    printf("freeing\n");
-
-    for (int i = 0; i < 10; i++)
-    {
-        free(com[i]);
-    }
-    // free(com);
-
-    for (int i = 0; i < 10; i++)
-    {
-        com[i] = (char *)malloc(100);
-        strcpy(com[i], "fadfas string no - ");
-        // strcat(com[i], (char)i);
-        printf("\b%s\t", com[i]);
-    }
     return 0;
 }

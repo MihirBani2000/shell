@@ -173,6 +173,7 @@ void execute()
         if (temp2 == '&')
         {
             bg_flag = 1;
+            command[num_args - 1] = NULL;
             --num_args;
         }
         else if (temp1 == '&')
