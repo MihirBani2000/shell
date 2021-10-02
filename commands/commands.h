@@ -8,6 +8,10 @@ void pinfo();
 void pwd();
 void repeat();
 void shell_commands(int bg);
+void fg();
+void bg();
+void jobs();
+void sig();
 
 // history
 void reset_history_buffer();

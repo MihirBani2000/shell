@@ -15,6 +15,11 @@ void shell_commands(int bg_flag)
         // child process
         setpgid(0, 0);
         // printf("\nchild pid %d\n", getpid());
+
+        // set signals to default for fg processes
+        signal(SIGINT, SIG_DFL);
+        signal(SIGTSTP, SIG_DFL);
+
         command[num_args] = NULL;
         if (execvp(command[0], command) < 0)
         {
@@ -45,8 +50,6 @@ void shell_commands(int bg_flag)
                 char *err_buf = (char *)malloc(SMALL_SIZE);
                 sprintf(err_buf, "Error in foreground process - %s", command[0]);
                 perror(err_buf);
-                // if (kill(getpid(), SIGTERM) < 0)
-                //     kill(getpid(), SIGKILL);
             }
 
             waitpid(pid, &status, WUNTRACED);
@@ -57,7 +60,7 @@ void shell_commands(int bg_flag)
             if (WIFSTOPPED(status))
             {
                 add_bg_proc(pid, command);
-                printf("Process %s with pid %d has been stopped.\n", command[0], pid);
+                printf("\rProcess %s with pid %d has been stopped.\n", command[0], pid);
             }
         }
     }

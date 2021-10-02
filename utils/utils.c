@@ -68,17 +68,17 @@ void handle_child_finish()
     if (pid <= 0)
         return;
     // some child process finished
-    for (int i = 0; i < num_bgjobs; i++)
+    for (int i = 1; i <= num_bgjobs; i++)
     {
         if (bgjobs[i].pid == pid)
         { // this job is now removed
-            num_bgjobs--;
             strcpy(temp_name, bgjobs[i].name);
             for (int j = i + 1; j <= num_bgjobs; j++)
             {
                 bgjobs[j - 1].pid = bgjobs[j].pid;
                 strcpy(bgjobs[j - 1].name, bgjobs[j].name);
             }
+            num_bgjobs--;
             break;
         }
     }
@@ -94,6 +94,7 @@ void handle_child_finish()
 
 void add_bg_proc(pid_t pid, char **proc_command)
 {
+    ++num_bgjobs;
     int idx = 0;
     strcpy(bgjobs[num_bgjobs].name, proc_command[0]);
     bgjobs[num_bgjobs].pid = pid;
@@ -105,7 +106,6 @@ void add_bg_proc(pid_t pid, char **proc_command)
         strcat(bgjobs[num_bgjobs].name, temp);
     }
     free(temp);
-    ++num_bgjobs;
 }
 
 void custom_exit(int flag)
@@ -148,6 +148,22 @@ void execute()
     else if (!strcmp(command[0], "history"))
     {
         print_history();
+    }
+    else if (!strcmp(command[0], "fg"))
+    {
+        fg();
+    }
+    else if (!strcmp(command[0], "bg"))
+    {
+        bg();
+    }
+    else if (!strcmp(command[0], "jobs"))
+    {
+        jobs();
+    }
+    else if (!strcmp(command[0], "sig"))
+    {
+        sig();
     }
     else
     {

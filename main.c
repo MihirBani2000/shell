@@ -20,12 +20,14 @@ int initialize_shell()
 
     SHELL_ID = getpid();
     signal(SIGCHLD, handle_child_finish);
+    signal(SIGINT, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
 
     // history
     strcpy(history_path, HOME);
     strcat(history_path, "/.shell_history");
     load_history_from_file();
-
+    num_bgjobs = 0;
     return 0;
 }
 
