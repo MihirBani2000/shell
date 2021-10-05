@@ -28,11 +28,11 @@ void lex_sort(int *arr)
 
 int main()
 {
-    int arr[100];
-    for (int i = 0; i < num_bgjobs + 1; i++)
-    {
-        arr[i] = i;
-    }
+    // int arr[100];
+    // for (int i = 0; i < num_bgjobs + 1; i++)
+    // {
+    //     arr[i] = i;
+    // }
     strcpy(bgjobs[1], "zebra");
     strcpy(bgjobs[2], "name");
     strcpy(bgjobs[3], "is");
@@ -42,13 +42,16 @@ int main()
     strcpy(bgjobs[7], "i");
     strcpy(bgjobs[8], "am z");
     strcpy(bgjobs[9], "hello");
-    printf("%d\n\n", strcmp(bgjobs[9], bgjobs[1]));
-    lex_sort(arr);
-    for (int i = 0; i < num_bgjobs + 1; i++)
+    // printf("%d\n\n", strcmp(bgjobs[9], bgjobs[1]));
+    // lex_sort(arr);
+    // for (int i = 0; i < num_bgjobs + 1; i++)
+    // {
+    //     printf("%d - ", arr[i]);
+    //     printf("%s\n", bgjobs[arr[i]]);
+    // }
+    if ((bgjobs[9][0] == 'h'))
     {
-        printf("%d - ", arr[i]);
-        printf("%s\n", bgjobs[arr[i]]);
+        printf("hielo\n");
     }
-
     return 0;
 }

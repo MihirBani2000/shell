@@ -63,7 +63,7 @@ int main()
         int counter = 0;
         while (counter < num_commands)
         {
-            if (tokenize_command(counter) > 0)
+            if (tokenize_command(all_commands[counter]) > 0)
             {
                 execute();
             }

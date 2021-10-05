@@ -4,7 +4,7 @@
 
 void die(const char *s)
 {
-    perror(s);
+    // perror(s);
     exit(1);
 }
 
@@ -13,7 +13,7 @@ struct termios orig_termios;
 void disableRawMode()
 {
     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)
-        die("tcsetattr");
+        die("tcsetattr inside disableRawMode");
 }
 
 /**
@@ -33,7 +33,7 @@ void enableRawMode()
     struct termios raw = orig_termios;
     raw.c_lflag &= ~(ICANON | ECHO);
     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1)
-        die("tcsetattr");
+        die("tcsetattr inside enableRawMode");
 }
 
 /**
@@ -126,6 +126,7 @@ void take_input_with_arrow(char *input_commands)
             }
             else if (c == 4)
             {
+                // Ctrl + D, End of Transmission
                 custom_exit(EXIT_SUCCESS);
             }
             else

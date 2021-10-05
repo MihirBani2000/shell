@@ -32,7 +32,7 @@ void tokenize_inputs(char *input_string)
     return;
 }
 
-int tokenize_command(int counter)
+int tokenize_command(char *input_command)
 {
     for (int i = 0; i < BIG_SIZE; i++)
     {
@@ -42,8 +42,8 @@ int tokenize_command(int counter)
     }
 
     char *delim = " \r\t\n";
-    char *input_command = (char *)malloc(BIG_SIZE * sizeof(char));
-    strcpy(input_command, all_commands[counter]);
+    // char *input_command = (char *)malloc(BIG_SIZE * sizeof(char));
+    // strcpy(input_command, input_string);
 
     char *temp_in = strtok(input_command, delim);
     int cnt = 0;
@@ -56,7 +56,7 @@ int tokenize_command(int counter)
     }
     num_args = cnt;
     command[num_args] = NULL;
-    free(input_command);
+    // free(input_command);
     return num_args;
 }
 
@@ -64,14 +64,16 @@ void handle_child_finish()
 {
     int status;
     char *temp_name = (char *)malloc(BIG_SIZE);
-    pid_t pid = waitpid(-1, &status, WNOHANG);
+    pid_t pid = waitpid(-1, &status, WNOHANG), temp_pid;
     if (pid <= 0)
         return;
     // some child process finished
     for (int i = 1; i <= num_bgjobs; i++)
     {
+        // matched job is now removed
         if (bgjobs[i].pid == pid)
-        { // this job is now removed
+        {
+            temp_pid = bgjobs[i].pid;
             strcpy(temp_name, bgjobs[i].name);
             for (int j = i + 1; j <= num_bgjobs; j++)
             {
@@ -83,9 +85,9 @@ void handle_child_finish()
         }
     }
     if (WIFEXITED(status) && !WEXITSTATUS(status))
-        fprintf(stderr, "\n%s with PID %d exited normally.\n", temp_name, pid);
+        fprintf(stderr, "\n%s with PID %d exited normally.\n", temp_name, temp_pid);
     else
-        fprintf(stderr, "\n%s with PID %d exited abnormally.\n", temp_name, pid);
+        fprintf(stderr, "\n%s with PID %d exited abnormally.\n", temp_name, temp_pid);
 
     show_prompt();
     free(temp_name);
@@ -116,7 +118,6 @@ void custom_exit(int flag)
 
 void execute()
 {
-    int exec_status = 0;
     if (!strcmp(command[0], "echo"))
     {
         echo();

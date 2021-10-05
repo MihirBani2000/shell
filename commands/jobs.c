@@ -75,11 +75,11 @@ void print_jobs(int flag)
                 break;
             }
         }
-
+        int T_flag = !strcmp(p_status, "T");
         if (flag == 1)
         {
             // only stopped processes
-            if (!strcmp(p_status, "T"))
+            if (T_flag)
             {
                 printf("[%d] Stopped %s [%d]\n", idx, bgjobs[idx].name, proc_pid);
             }
@@ -87,12 +87,7 @@ void print_jobs(int flag)
         else if (flag == 2)
         {
             // only running processes
-            // if (!strcmp(p_status, "R"))
-            // {
-            //     printf("[%d] Running %s [%d]\n", idx, bgjobs[idx].name, proc_pid);
-            // }
-
-            if (strcmp(p_status, "T"))
+            if (!T_flag)
             {
                 printf("[%d] Running %s [%d]\n", idx, bgjobs[idx].name, proc_pid);
             }
@@ -100,11 +95,10 @@ void print_jobs(int flag)
         else
         {
             // all processes
-            if (!strcmp(p_status, "T"))
+            if (T_flag)
             {
                 printf("[%d] Stopped %s [%d]\n", idx, bgjobs[idx].name, proc_pid);
             }
-            // else if (!strcmp(p_status, "R"))
             else
             {
                 printf("[%d] Running %s [%d]\n", idx, bgjobs[idx].name, proc_pid);

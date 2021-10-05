@@ -45,12 +45,13 @@ void shell_commands(int bg_flag)
             signal(SIGTTIN, SIG_IGN);
             signal(SIGTTOU, SIG_IGN);
             int status;
-            if (tcsetpgrp(STDIN_FILENO, pid) < 0)
-            {
-                char *err_buf = (char *)malloc(SMALL_SIZE);
-                sprintf(err_buf, "Error in foreground process - %s", command[0]);
-                perror(err_buf);
-            }
+            // if (tcsetpgrp(STDIN_FILENO, pid) < 0)
+            // {
+            //     char *err_buf = (char *)malloc(SMALL_SIZE);
+            //     sprintf(err_buf, "Error in foreground process - %s", command[0]);
+            //     perror(err_buf);
+            // }
+            tcsetpgrp(STDIN_FILENO, pid);
 
             waitpid(pid, &status, WUNTRACED);
             tcsetpgrp(STDIN_FILENO, getpgrp());

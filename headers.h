@@ -49,4 +49,7 @@ int hist_count;
 char *history[MAX_HISTORY];
 char history_path[BIG_SIZE];
 
+// piping related
+char *pipe_commands[BIG_SIZE];
+
 #endif

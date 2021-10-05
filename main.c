@@ -48,13 +48,7 @@ int main()
         char *input_commands = (char *)malloc(BIG_SIZE * sizeof(char));
         memset(input_commands, '\0', BIG_SIZE);
         setbuf(stdout, NULL);
-        // if (fgets(input_commands, BIG_SIZE, stdin) == NULL)
-        // {
-        //     // pressing ctrl+D
-        //     custom_exit(EXIT_SUCCESS);
-        // }
         take_input_with_arrow(input_commands);
-
         // printf("\nInput Read: [%s]\n", input_commands);
 
         if (!strcmp(input_commands, "\n"))
@@ -78,13 +72,24 @@ int main()
         int counter = 0;
         while (counter < num_commands)
         {
-            if (tokenize_command(counter) > 0)
+            if (check_pipe(counter))
+            {
+                printf("\n");
+                piped_execute(all_commands[counter]);
+            }
+            // else if (check_redirect(counter))
+            // {
+            //     redirected_execute(counter);
+            // }
+            else if (tokenize_command(all_commands[counter]) > 0)
             {
                 printf("\n");
                 execute();
             }
             counter++;
         }
+        // fflush(stdout);
+        // fflush(stdin);
     }
 
     return 0;
