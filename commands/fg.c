@@ -27,15 +27,15 @@ void fg()
     }
 
     job_pid = bgjobs[job_no].pid;
+    strcpy(job_name, bgjobs[job_no].name);
 
     // for foreground processes
-    // printf("\nparent pid %d\n", pid);
     signal(SIGTTIN, SIG_IGN);
     signal(SIGTTOU, SIG_IGN);
     if (tcsetpgrp(STDIN_FILENO, job_pid) < 0)
     {
         char *err_buf = (char *)malloc(SMALL_SIZE);
-        sprintf(err_buf, "fg: Error in foreground process - %s", command[0]);
+        sprintf(err_buf, "fg: Error in foreground process - %s", job_name);
         perror(err_buf);
     }
 
@@ -46,9 +46,27 @@ void fg()
     signal(SIGTTOU, SIG_DFL);
 
     if (WIFSTOPPED(status))
+    { // ctrl Z pressed
+        // add_bg_proc(job_pid, command);
+        printf("\rProcess %s with pid %d has been stopped.\n", job_name, job_pid);
+        return;
+    }
+
+    // other than ctrl z , that is process stopped automatically or ctrl C
+    for (int i = 1; i <= num_bgjobs; i++)
     {
-        add_bg_proc(job_pid, command);
-        printf("\rProcess %s with pid %d has been stopped.\n", command[0], job_pid);
+        // matched job is now removed
+        if (bgjobs[i].pid == job_pid)
+        {
+            // printf("child pid %d\n", pid);
+            for (int j = i + 1; j <= num_bgjobs; j++)
+            {
+                bgjobs[j - 1].pid = bgjobs[j].pid;
+                strcpy(bgjobs[j - 1].name, bgjobs[j].name);
+            }
+            num_bgjobs--;
+            break;
+        }
     }
 
     return;

@@ -37,7 +37,7 @@ void print_jobs(int flag)
     // sorting the entries by alphabetical order of command names
     lex_sort(temp_bgjobs);
     // printf("HIHI\n");
-    // for (int i = 1; i <= num_bgjobs + 1; i++)
+    // for (int i = 1; i <= num_bgjobs; i++)
     // {
     //     printf("%d - ", temp_bgjobs[i]);
     //     printf("%s\n", bgjobs[temp_bgjobs[i]].name);
@@ -57,11 +57,11 @@ void print_jobs(int flag)
         proc_file = fopen(proc_file_path, "r");
         if (proc_file == NULL)
         {
-            char *err_buf = malloc(SMALL_SIZE * sizeof(char));
-            sprintf(err_buf, "Process with pid: %d doesn't exist", proc_pid);
-            perror(err_buf);
-            free(err_buf);
-            return;
+            // char *err_buf = malloc(SMALL_SIZE * sizeof(char));
+            // sprintf(err_buf, "Process with pid: %d doesn't exist", proc_pid);
+            // perror(err_buf);
+            // free(err_buf);
+            continue;
         }
 
         while (fgets(file_buffer, BIG_SIZE, proc_file))

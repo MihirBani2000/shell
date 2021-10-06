@@ -62,6 +62,7 @@ int tokenize_command(char *input_command)
 
 void handle_child_finish()
 {
+
     int status;
     char *temp_name = (char *)malloc(BIG_SIZE);
     pid_t pid = waitpid(-1, &status, WNOHANG), temp_pid;
@@ -73,6 +74,7 @@ void handle_child_finish()
         // matched job is now removed
         if (bgjobs[i].pid == pid)
         {
+            // printf("child pid %d\n", pid);
             temp_pid = bgjobs[i].pid;
             strcpy(temp_name, bgjobs[i].name);
             for (int j = i + 1; j <= num_bgjobs; j++)
@@ -116,8 +118,30 @@ void custom_exit(int flag)
     exit(flag);
 }
 
+int is_valid_file(char *file)
+{
+    struct stat fs;
+    if (stat(file, &fs) == 0)
+    {
+        if (S_ISREG(fs.st_mode) && !S_ISDIR(fs.st_mode))
+            return 1;
+    }
+    return 0;
+}
+
 void execute()
 {
+    // for (int i = 0; i < num_args; i++)
+    // {
+    //     printf("command - %sTEST\n", command[i]);
+    // }
+
+    if (check_redirect())
+    {
+        // printf("in execute if redirect present\n");
+        redirected_execute();
+        return;
+    }
     if (!strcmp(command[0], "echo"))
     {
         echo();
