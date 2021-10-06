@@ -190,6 +190,10 @@ void execute()
     {
         sig();
     }
+    else if (!strcmp(command[0], "replay"))
+    {
+        replay();
+    }
     else
     {
         int bg_flag = 0, len = strlen(command[num_args - 1]);

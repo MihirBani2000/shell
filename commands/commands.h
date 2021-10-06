@@ -7,6 +7,7 @@ void ls();
 void pinfo();
 void pwd();
 void repeat();
+void replay();
 void shell_commands(int bg);
 void fg();
 void bg();
