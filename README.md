@@ -56,12 +56,16 @@ Extra whitespaces given in commands or arguments is ignored.
        - `dirty` - print the size of the part of the memory which is **dirty**.   
        Used the file `/proc/meminfo` to find this information.
 
-### Processes and Misc features
+### Processes and Other functionalities
 - **Foreground process** - execution of process that happen in the foreground. These take away control from shell and must be finished/terminated to regain control of the shell.
 - **Background process** - any command passed with `&` flag is treated as background process. The user can use the shell normally without waiting for completion of command. The pid of child process is printed to terminal when command is executed. 
 - **Finishing of Background process** - a message is printed whenever a background process is completed/terminated, expressing whether is was normal or abnormal termination. 
 - **Piping** - The shell supports `|` piping, which transfers the input and output from one command to another instead of the terminal and thus allows interprocess communication. Implemented using `dup` and `dup2`. It can also be used in combination with Redirection.
 - **Redirection** -  The shell supports `<`,`>`,`>>` redirections. Through this the commands can give output and take input from files present in the computer. Implemented using `dup` and `dup2`. It can also be used in combination with Piping.
+- **Signal Handling**-
+  - `CTRL+Z` - converts any foreground process to background and stops it. Signal used - `SIGTSTP`. no effect on the shell if no foreground process running. Implemented using `signal()` function.
+  - `CTRL+C` - Interrupts any foreground process. Signal used - `SIGINT`. No effect on the shell if no foreground process running. Implemented using `signal()` function.
+  - `CTRL+D` - Closes this shell, but not the actual terminal of the computer. Implemented by considering the EOF (end of file) ASCII character. 
 ## File Structure
 | Files            | Functionality                                                                                                     |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------- |
