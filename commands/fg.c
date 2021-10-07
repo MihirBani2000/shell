@@ -53,21 +53,8 @@ void fg()
     }
 
     // other than ctrl z , that is process stopped automatically or ctrl C
-    for (int i = 1; i <= num_bgjobs; i++)
-    {
-        // matched job is now removed
-        if (bgjobs[i].pid == job_pid)
-        {
-            // printf("child pid %d\n", pid);
-            for (int j = i + 1; j <= num_bgjobs; j++)
-            {
-                bgjobs[j - 1].pid = bgjobs[j].pid;
-                strcpy(bgjobs[j - 1].name, bgjobs[j].name);
-            }
-            num_bgjobs--;
-            break;
-        }
-    }
+    char *temp_dum = malloc(BIG_SIZE * sizeof(char));
+    remove_bg_proc(job_pid, temp_dum);
 
     return;
 }

@@ -114,7 +114,6 @@ void execute_redirected_command()
     }
 
     temp_command[count] = NULL;
-    num_args = count;
 
     for (int i = 0; i < BIG_SIZE; i++)
     {
@@ -123,11 +122,14 @@ void execute_redirected_command()
         command[i] = (char *)malloc(BIG_SIZE * sizeof(char));
     }
 
+    num_args = count;
+    command[num_args] = NULL;
+
     for (int i = 0; i < num_args; i++)
     {
         strcpy(command[i], temp_command[i]);
     }
-    command[num_args] = NULL;
+    // command[num_args] = NULL;
 
     if (num_args > 0)
         execute();

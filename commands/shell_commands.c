@@ -14,7 +14,6 @@ void shell_commands(int bg_flag)
     {
         // child process
         setpgid(0, 0);
-        // printf("\nchild pid %d\n", getpid());
 
         // set signals to default for fg processes
         signal(SIGINT, SIG_DFL);

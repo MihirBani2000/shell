@@ -13,6 +13,6 @@ void pwd()
         return;
     }
     printf("%s\n", CWD);
-    fflush(stdout);
+    // fflush(stdout);
     return;
 }

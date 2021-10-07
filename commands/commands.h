@@ -13,6 +13,7 @@ void fg();
 void bg();
 void jobs();
 void sig();
+void baywatch();
 
 // history
 void reset_history_buffer();

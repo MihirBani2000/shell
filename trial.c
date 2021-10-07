@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
+#include "signal.h"
 
 #define num_bgjobs 9
 char bgjobs[num_bgjobs + 1][100];
@@ -33,15 +34,15 @@ int main()
     // {
     //     arr[i] = i;
     // }
-    strcpy(bgjobs[1], "zebra");
-    strcpy(bgjobs[2], "name");
-    strcpy(bgjobs[3], "is");
-    strcpy(bgjobs[4], "mihir");
-    strcpy(bgjobs[5], "bani");
-    strcpy(bgjobs[6], "am zz");
-    strcpy(bgjobs[7], "i");
-    strcpy(bgjobs[8], "am z");
-    strcpy(bgjobs[9], "hello");
+    // strcpy(bgjobs[1], "zebra");
+    // strcpy(bgjobs[2], "name");
+    // strcpy(bgjobs[3], "is");
+    // strcpy(bgjobs[4], "mihir");
+    // strcpy(bgjobs[5], "bani");
+    // strcpy(bgjobs[6], "am zz");
+    // strcpy(bgjobs[7], "i");
+    // strcpy(bgjobs[8], "am z");
+    // strcpy(bgjobs[9], "hello");
     // printf("%d\n\n", strcmp(bgjobs[9], bgjobs[1]));
     // lex_sort(arr);
     // for (int i = 0; i < num_bgjobs + 1; i++)
@@ -49,9 +50,29 @@ int main()
     //     printf("%d - ", arr[i]);
     //     printf("%s\n", bgjobs[arr[i]]);
     // }
-    if ((bgjobs[9][0] == 'h'))
+    // if ((bgjobs[9][0] == 'h'))
+    // {
+    //     printf("hielo\n");
+    // }
+
+    int pid = fork();
+    if (pid == 0)
     {
-        printf("hielo\n");
+        while (1)
+        {
+            printf("HIIIIIII\n");
+        }
     }
+    else
+    {
+        char ch;
+        scanf("%c", ch);
+        if (ch == 'q')
+        {
+            if (kill(pid, SIGTERM) < 0)
+                kill(pid, SIGKILL);
+        }
+    }
+
     return 0;
 }

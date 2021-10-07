@@ -77,10 +77,6 @@ int main()
                 printf("\n");
                 piped_execute(all_commands[counter]);
             }
-            // else if (check_redirect(counter))
-            // {
-            //     redirected_execute(counter);
-            // }
             else if (tokenize_command(all_commands[counter]) > 0)
             {
                 printf("\n");

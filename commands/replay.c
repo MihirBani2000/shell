@@ -81,7 +81,6 @@ void update_execute_command(int interval, int period)
     }
 
     temp_command[count] = NULL;
-    num_args = count;
 
     for (int i = 0; i < BIG_SIZE; i++)
     {
@@ -90,47 +89,66 @@ void update_execute_command(int interval, int period)
         command[i] = (char *)malloc(BIG_SIZE * sizeof(char));
     }
 
+    num_args = count;
+    command[num_args] = NULL;
+
     for (int i = 0; i < num_args; i++)
     {
         strcpy(command[i], temp_command[i]);
     }
-    command[num_args] = NULL;
+    // command[num_args] = NULL;
 
-    if (num_args > 0)
+    // if (num_args > 0)
+    // {
+    //     int num = 1;
+    //     if (interval < period)
+    //         num = period / interval;
+    //     for (int idx = 0; idx < num; idx++)
+    //     {
+    //         // printf("\n");
+    //         execute();
+    //         sleep(interval);
+    //     }
+    // }
+
+    pid_t pid = fork();
+    if (pid < 0)
     {
-        int num = 1;
-        if (interval < period)
-            num = period / interval;
-        for (int idx = 0; idx < num; idx++)
+        perror("replay: error while forking");
+        return;
+    }
+    else if (!pid)
+    {
+        // child process
+        setpgid(0, 0);
+
+        // set signals to default for fg processes
+        signal(SIGINT, SIG_DFL);
+        signal(SIGTSTP, SIG_DFL);
+
+        if (num_args > 0)
         {
-            printf("\n");
-            execute();
-            sleep(interval);
+            int num = 1;
+            if (interval < period)
+                num = period / interval;
+            for (int idx = 0; idx < num; idx++)
+            {
+                printf("\n");
+                execute();
+                sleep(interval);
+                // printf("\n");
+            }
         }
+        printf("\nreplay finised\n");
+
+        exit(1);
+    }
+    else
+    {
+        // add_bg_proc(pid, command);
+        return;
     }
 
-    // pid_t pid = fork();
-    // if (pid < 0)
-    // {
-    //     perror("replay: error while forking");
-    //     return;
-    // }
-    // else if (pid == 0)
-    // {
-    //     if (num_args > 0)
-    //     {
-    //         int num = 1;
-    //         if (interval < period)
-    //             num = period / interval;
-    //         for (int idx = 0; idx < num; idx++)
-    //         {
-    //             printf("\n");
-    //             execute();
-    //             sleep(interval);
-    //         }
-    //     }
-    //     exit(1);
-    // }
     return;
 }
 

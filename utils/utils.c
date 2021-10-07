@@ -60,23 +60,17 @@ int tokenize_command(char *input_command)
     return num_args;
 }
 
-void handle_child_finish()
+void remove_bg_proc(pid_t pid, char *temp_name)
 {
-
-    int status;
-    char *temp_name = (char *)malloc(BIG_SIZE);
-    pid_t pid = waitpid(-1, &status, WNOHANG), temp_pid;
-    if (pid <= 0)
-        return;
-    // some child process finished
+    int temp_pid = -1;
     for (int i = 1; i <= num_bgjobs; i++)
     {
         // matched job is now removed
         if (bgjobs[i].pid == pid)
         {
-            // printf("child pid %d\n", pid);
-            temp_pid = bgjobs[i].pid;
+            temp_pid = pid;
             strcpy(temp_name, bgjobs[i].name);
+            // printf("child pid %d\n", pid);
             for (int j = i + 1; j <= num_bgjobs; j++)
             {
                 bgjobs[j - 1].pid = bgjobs[j].pid;
@@ -86,14 +80,6 @@ void handle_child_finish()
             break;
         }
     }
-    if (WIFEXITED(status) && !WEXITSTATUS(status))
-        fprintf(stderr, "\n%s with PID %d exited normally.\n", temp_name, temp_pid);
-    else
-        fprintf(stderr, "\n%s with PID %d exited abnormally.\n", temp_name, temp_pid);
-
-    show_prompt();
-    free(temp_name);
-    fflush(stdout);
 }
 
 void add_bg_proc(pid_t pid, char **proc_command)
@@ -110,6 +96,27 @@ void add_bg_proc(pid_t pid, char **proc_command)
         strcat(bgjobs[num_bgjobs].name, temp);
     }
     free(temp);
+}
+
+void handle_child_finish()
+{
+
+    int status;
+    char *temp_name = (char *)malloc(BIG_SIZE);
+    pid_t pid = waitpid(-1, &status, WNOHANG);
+    if (pid <= 0)
+        return;
+    // some child process finished
+    remove_bg_proc(pid, temp_name);
+
+    if (WIFEXITED(status) && !WEXITSTATUS(status))
+        fprintf(stderr, "\n%s with PID %d exited normally.\n", temp_name, pid);
+    else
+        fprintf(stderr, "\n%s with PID %d exited abnormally.\n", temp_name, pid);
+
+    show_prompt();
+    free(temp_name);
+    fflush(stdout);
 }
 
 void custom_exit(int flag)
@@ -131,14 +138,8 @@ int is_valid_file(char *file)
 
 void execute()
 {
-    // for (int i = 0; i < num_args; i++)
-    // {
-    //     printf("command - %sTEST\n", command[i]);
-    // }
-
     if (check_redirect())
     {
-        // printf("in execute if redirect present\n");
         redirected_execute();
         return;
     }
@@ -193,6 +194,10 @@ void execute()
     else if (!strcmp(command[0], "replay"))
     {
         replay();
+    }
+    else if (!strcmp(command[0], "baywatch"))
+    {
+        baywatch();
     }
     else
     {
