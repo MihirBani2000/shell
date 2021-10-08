@@ -47,14 +47,18 @@ Extra whitespaces given in commands or arguments is ignored.
    1.  `sig` - Takes the argument *job_num* which is made by the shell and *signal* which is sent to the process corresponding to that *job num*. Errors are printed if its not successful in sending the signal. 
    2.  `fg` - Takes the argument *job_num* which is made by the shell. It brings any background process of the shell to foreground. It also changes the state of the process to running.
    3.  `bg` - Takes the argument *job_num* which is made by the shell. It continues any stopped process which is in the background, if its already running, it will be ignored.
-   4.  `replay` - It repeats the given command `-command` in intervals of `-interval` and upto total time period of `-period`. It is started as a background process, so the shell is not blocked and can be used for other commands independently of `replay`, which will execute automatically in its intervals. Implemented by using `fork`. 
-   5.  `baywatch` - `baywatch -n <seconds> command`, it repeats the command in intervals of `-n` untill `q`  is pressed. where `command` can be:
-       - `interrupt` - print the number of times the CPU(s) have been interrupted by the keyboardcontroller (i8042).   
-       Used the file `/proc/interrupts` to find this information.
-       - `newborn` - print the PID of the process that was most recently created on the system.   
-         Used the file `/proc/loadavg` to find this information.
-       - `dirty` - print the size of the part of the memory which is **dirty**.   
-       Used the file `/proc/meminfo` to find this information.
+   4.  `replay` - Syntax: `replay -command <command> -interval <i> -period <p>`
+       -  It repeats the given command `<command>` in intervals of `<i>` and upto total time period of `<p>`. 
+       -  It is started as a foreground process, so the shell is blocked and cannot be used for other commands before completion of `replay`.
+       -  The whole time taken by `replay` is equal to `<p>` irrespective the value of `<i>`. 
+   6.  `baywatch` - Syntax: `baywatch -n <seconds> command`.
+       - It repeats the command in intervals of `-n` untill `q`  is pressed. where `command` can be:
+         - `interrupt` - print the number of times the CPU(s) have been interrupted by the keyboardcontroller (i8042).   
+           Used the file `/proc/interrupts` to find this information.
+         - `newborn` - print the PID of the process that was most recently created on the system.   
+           Used the file `/proc/loadavg` to find this information.
+         - `dirty` - print the size of the part of the memory which is **dirty**.   
+           Used the file `/proc/meminfo` to find this information.
 
 ### Processes and Other functionalities
 - **Foreground process** - execution of process that happen in the foreground. These take away control from shell and must be finished/terminated to regain control of the shell.

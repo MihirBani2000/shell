@@ -23,14 +23,17 @@ int check_flags(int *interval, int *period)
             strcpy(command[i], " ");
             // a loop for finding the command
             int idx = i + 1;
-            while ((command[idx] != NULL) && (idx < num_args - 1))
+            while ((command[idx] != NULL) && (idx < num_args))
             {
-                if (command[idx + 1] == NULL)
-                    break;
-                if (command[idx + 1][0] == '-')
-                    break;
-                idx++;
                 c_arg_flag++;
+                if (idx < num_args - 1)
+                {
+                    if (command[idx + 1] == NULL)
+                        break;
+                    if (!strcmp(command[idx + 1], "-interval") || !strcmp(command[idx + 1], "-period"))
+                        break;
+                }
+                idx++;
             }
             i = idx;
         }
@@ -56,9 +59,10 @@ int check_flags(int *interval, int *period)
         fprintf(stderr, "replay: Invalid arguments\n");
         return -1;
     }
-    if ((interval <= 0) || (period <= 0) || (c_arg_flag <= 0))
+    if ((*interval <= 0) || (*period <= 0) || (c_arg_flag <= 0))
     {
-        fprintf(stderr, "replay: Invalid arguments\n");
+        // printf("int %d per %d c %d\n", *interval, *period, c_arg_flag);
+        fprintf(stderr, "replay: Invalid values for flags\n");
         return -1;
     }
 
@@ -96,58 +100,57 @@ void update_execute_command(int interval, int period)
     {
         strcpy(command[i], temp_command[i]);
     }
-    // command[num_args] = NULL;
 
-    // if (num_args > 0)
-    // {
-    //     int num = 1;
-    //     if (interval < period)
-    //         num = period / interval;
-    //     for (int idx = 0; idx < num; idx++)
-    //     {
-    //         // printf("\n");
-    //         execute();
-    //         sleep(interval);
-    //     }
-    // }
-
-    pid_t pid = fork();
-    if (pid < 0)
+    if (num_args > 0)
     {
-        perror("replay: error while forking");
-        return;
-    }
-    else if (!pid)
-    {
-        // child process
-        setpgid(0, 0);
-
-        // set signals to default for fg processes
-        signal(SIGINT, SIG_DFL);
-        signal(SIGTSTP, SIG_DFL);
-
-        if (num_args > 0)
+        int num = 0;
+        int remainder = period % interval;
+        num = period / interval;
+        for (int idx = 0; idx < num; idx++)
         {
-            int num = 1;
-            if (interval < period)
-                num = period / interval;
-            for (int idx = 0; idx < num; idx++)
-            {
-                printf("\n");
-                execute();
-                sleep(interval);
-                // printf("\n");
-            }
+            sleep(interval);
+            execute();
+            printf("\n");
         }
-        printf("\nreplay finised\n");
+        sleep(remainder);
+    }
 
-        exit(1);
-    }
-    else
-    {
-        // add_bg_proc(pid, command);
-        return;
-    }
+    // pid_t pid = fork();
+    // if (pid < 0)
+    // {
+    //     perror("replay: error while forking");
+    //     return;
+    // }
+    // else if (!pid)
+    // {
+    //     // child process
+    //     setpgid(0, 0);
+
+    //     // set signals to default for fg processes
+    //     signal(SIGINT, SIG_DFL);
+    //     signal(SIGTSTP, SIG_DFL);
+
+    //     if (num_args > 0)
+    //     {
+    //         int num = 0;
+    //         int remainder = period % interval;
+    //         num = period / interval;
+    //         for (int idx = 0; idx < num; idx++)
+    //         {
+    //             sleep(interval);
+    //             execute();
+    //             printf("\n");
+    //         }
+    //         sleep(remainder);
+    //     }
+    //     printf("\nreplay finised\n");
+    //     exit(1);
+    // }
+    // else
+    // {
+    //     // add_bg_proc(pid, command);
+    //     return;
+    // }
 
     return;
 }
@@ -155,7 +158,7 @@ void update_execute_command(int interval, int period)
 void replay()
 {
     // replay -command <command> -interval <interval> -period <period>
-    if (num_args < 8)
+    if (num_args < 7)
     {
         fprintf(stderr, "replay: invalid arguments\n");
         return;
